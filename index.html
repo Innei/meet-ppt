@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>使用 React Native 构建 App</title>
+    <link rel="stylesheet" href="script/reveal.css" />
+    <link rel="stylesheet" href="script/theme/black.css" />
+
+    <style>
+      .ab {
+        position: absolute;
+      }
+      .tl {
+        text-align: left;
+      }
+      .tr {
+        text-align: right;
+      }
+      .g {
+        display: grid;
+        grid-gap: 20px;
+      }
+      .g-3-4 {
+        grid-template-columns: 3fr 1fr;
+      }
+      .g-half {
+        grid-template-columns: 1fr 1fr;
+      }
+      .f {
+        display: flex;
+      }
+      section > p {
+        text-align: left;
+      }
+      html,
+      body,
+      .reveal {
+        font-size: 18px;
+      }
+
+      .ic {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .ic > figcaption {
+        margin-top: 1rem;
+      }
+      .ic img {
+        flex-shrink: 0;
+      }
+      figcaption > p {
+        margin: 0 !important;
+      }
+      .images {
+        display: flex;
+        justify-content: space-around;
+      }
+      .images > .ic {
+        /* margin-right: 5rem; */
+      }
+    </style>
+
+    <style>
+      .navbar-brand {
+        position: absolute;
+        z-index: 9;
+        left: 1rem;
+        top: 1rem;
+        color: #fff;
+        text-decoration: none;
+        display: inline-flex;
+        font-weight: 700;
+        height: 2rem;
+        align-items: center;
+        margin-right: 1rem;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
+          Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, Helvetica, Arial,
+          Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+      }
+      .navbar-brand:hover {
+        color: #61dafb;
+      }
+      .navbar-brand:hover .navbar-logo {
+        transform: rotate(180deg) scale(0.9);
+      }
+      .navbar-logo {
+        width: 38px;
+        height: 34px;
+        transition: transform 0.5s;
+      }
+      .navbar-title {
+        font-weight: 600;
+        font-size: 18px;
+        transition: color 0.5s;
+        margin-left: 1.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <a class="navbar-brand" href="//reactnative.dev/"
+      ><img
+        class="navbar-logo"
+        src="./images/header_logo.svg"
+        alt="React Native"
+      /><strong class="navbar-title">React Native</strong></a
+    >
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <h1>使用 React Native 构建 App</h1>
+          <h4 style="text-align: right">-- 「遇见 APP」</h4>
+        </section>
+
+        <section>
+          <h2>什么是混合开发</h2>
+          <p>混合开发对应的是开发混合模式的应用程序 (hybrid application).</p>
+          <p>
+            hybrid app 是指介于web-app、native-app这两者之间的app，兼具“Native
+            App良好用户交互体验的优势”和“Web
+            App跨平台开发的优势”。混合应用本质上是被放在原生应用外壳中的网络应用。一旦它们从应用商店下载并安装在本地，外壳就能够通过嵌入应用中的浏览器连接到移动平台提供的任何功能。
+          </p>
+        </section>
+
+        <section data-auto-animate>
+          <h2>混合开发</h2>
+          <p>
+            混合开发的出现让编写 App 变得尤为简单. 甚至能用一套代码同时编译生成
+            Android/iOS/Web 三端. 更为激进的是如果使用 uni-app
+            一类框架能同时生成 Android/iOS/Web/以及各类小程序平台.
+          </p>
+          <p>
+            同时, 开发 Android App 不再受限于 Java 或 Kotlin, 开发 iOS
+            不再受限于 Objective-C/C++ 或 Swift.
+          </p>
+          <p>让广大前端开发者参与到移动端开发中, 成为可能</p>
+          <h3 class="tl">广为人知的混合开发框架</h3>
+          <div class="images">
+            <div class="ic">
+              <img src="./images/header_logo.svg" alt="" height="80" />
+              <caption>
+                React Native
+              </caption>
+            </div>
+
+            <div class="ic">
+              <img src="./images/flutter-logo.svg" alt="" height="80" />
+              <caption>
+                Flutter
+              </caption>
+            </div>
+
+            <div class="ic">
+              <img src="./images/uniapp4@2x.png" alt="" height="80" />
+              <caption>
+                uni-app
+              </caption>
+            </div>
+          </div>
+        </section>
+
+        <section data-auto-animate>
+          <h2>混合开发</h2>
+
+          <div class="g g-half">
+            <div class="">
+              <span> 好处 </span>
+              <br />
+              <br />
+              <ul>
+                <li>开发门槛低</li>
+                <li>开发成本低</li>
+                <li>编译速度更快</li>
+                <li>更容易做到热更新</li>
+              </ul>
+            </div>
+            <div class="">
+              <span> 缺点 </span>
+              <br />
+              <br />
+              <ul>
+                <li>runtime 效率没有原生快</li>
+                <li>UI/UX 体验可能不及 native app</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section data-auto-animate>
+          <h2>混合开发</h2>
+
+          <h4 class="tl">React Native</h4>
+
+          <p>
+            随着 React 的盛行，其移动开发框架 React Native
+            也收到了广大开发者的青睐，以下简称 RN。通过 RN 我们能够使用
+            JavaScript
+            语言来实现跨平台移动应用的开发，打开了前端工程师通往移动平台的大门。用
+            RN 官方的介绍来概括它的特点就是：<code>
+              Learn once, write anywhere </code
+            >。
+          </p>
+        </section>
+
+        <section>
+          <h2>React Native 混合开发</h2>
+
+          <h4 class="tl">使用 React Native 构建的 APP</h4>
+          <div class="images">
+            <div class="ic">
+              <figure>
+                <img src="images/facebook.png" alt="" height="80" />
+                <figcaption>
+                  <p>Facebook</p>
+                  <p>iOS/Android</p>
+                </figcaption>
+              </figure>
+            </div>
+
+            <div class="ic">
+              <figure>
+                <img src="images/qq.png" alt="" height="80" />
+                <figcaption>
+                  <p>Tencent QQ</p>
+                  <p>Android</p>
+                </figcaption>
+              </figure>
+            </div>
+            <div class="ic">
+              <figure>
+                <img src="images/discord.png" alt="" height="80" />
+                <figcaption>
+                  <p>Discord</p>
+                  <p>iOS</p>
+                </figcaption>
+              </figure>
+            </div>
+            <div class="ic">
+              <figure>
+                <img src="images/jdcom.png" alt="" height="80" />
+                <figcaption>
+                  <p>JD</p>
+                  <p>iOS/Android</p>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+
+          <div style="position: absolute; opacity: 0.4; font-size: 0.8em">
+            Visit this to learn more:
+            <a href="https://reactnative.dev/showcase">Showcase</a>
+          </div>
+        </section>
+
+        <section data-auto-animate>
+          <h2>React Native 混合开发</h2>
+          <h4 class="tl">React Native 应用的结构</h4>
+          <div class="g g-half">
+            <div style="background-color: white">
+              <img src="images/struct.png" alt="" />
+            </div>
+            <div class="tl">
+              <p>
+                从图中可以看到，我们整个的 RN 应用可以分为两层展示： JavaScript
+                Code 层 Native Code 层
+                也可以理解为所谓的应用层和底层。应用层通过 JavaScript 桥接层
+                与底层平台进行交互，获取底层平台的原生 APIs、UI
+                组件及一些自定义组件等。
+              </p>
+              <p>
+                这样的分层能够使应用层的开发变得简单、高效和跨平台，对于应用的稳定性、运行时的性能来说将和原生平台保持接近。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2>Acknowledge</h2>
+
+          <ul>
+            <li>
+              <a href="https://juejin.cn/post/6844903913427206152"
+                >React Native 混合开发与实现
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://searchsoftwarequality.techtarget.com/definition/hybrid-application-hybrid-app"
+                >What is a hybrid application</a
+              >
+            </li>
+            <li>
+              <a href="https://zhuanlan.zhihu.com/p/105556638">
+                混合开发到底怎么个混法？</a
+              >
+            </li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </body>
+  <script src="script/reveal.js"></script>
+
+  <script>
+    Reveal.initialize({
+      mouseWheel: true,
+      hash: true,
+      touch: true,
+
+      slideNumber: true,
+      // parallaxBackgroundImage: "./public/images/bg.jpg",
+      // parallaxBackgroundHorizontal: 200,
+      // parallaxBackgroundVertical: 50,
+      // parallaxBackgroundSize: "2100px 900px"
+    })
+  </script>
+  <script></script>
+</html>
