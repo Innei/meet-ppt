@@ -86,6 +86,11 @@
       .images > .ic {
         /* margin-right: 5rem; */
       }
+
+      .tableizer-table td {
+        padding: 4px;
+        margin: 3px;
+      }
     </style>
 
     <style>
@@ -317,11 +322,170 @@
         <!-- TODO -->
         <!-- main content start -->
 
-        <section data-auto-animate="">
-          <h1>Meet App</h1>
-          <p style="text-align: center">
-            Meet 是一个获取一言(hikotoko), 并可以记录自己灵感的 APP
+        <section>
+          <h1>有时候我们感慨现</h1>
+          <h1>在的时光过的真快</h1>
+        </section>
+
+        <section>
+          <h1 class="">
+            我们的生活中总有一些<br />精彩或失落的瞬间&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />值得我们去记录&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </h1>
+        </section>
+
+        <section>
+          <h1>你可以把它当做一款树洞软件</h1>
+        </section>
+
+        <section>
+          <h1 class="tl">为了它的完美运行，我们在前后端都下了一定的功夫</h1>
+          <del style="color: #bbb; opacity: 0.8; font-size: 0.5rem">
+            没有 BUG,没有 BUG,没有 BUG
+          </del>
+        </section>
+
+        <section>
+          <h1>前端我们使用 React-Native 混合开发技术</h1>
+        </section>
+
+        <section>
+          <h1>后端我们使用 Node.JS 开发了 Meet 正常工作所需要的接口</h1>
+        </section>
+        <section>
+          <h1>
+            我们为 Meet 开发了这些接口，这些接口驱动着
+            Meet，使它的服务能平稳运行。
+          </h1>
+        </section>
+
+        <section>
+          <table class="tableizer-table">
+            <thead>
+              <tr class="tableizer-firstrow">
+                <th>API</th>
+                <th>API含义</th>
+                <th>请求方式</th>
+                <th>Content-Type</th>
+                <th>Authorization</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>/v1/auth/register</td>
+                <td>用户注册</td>
+                <td>POST</td>
+                <td>application/json</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>/v1/auth/login</td>
+                <td>用户登陆接口</td>
+                <td>POST</td>
+                <td>application/json</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>/v1/users</td>
+                <td>用户注销</td>
+                <td>DELETE</td>
+                <td>&nbsp;</td>
+                <td>token</td>
+              </tr>
+              <tr>
+                <td>/v1/users</td>
+                <td>更新用户信息</td>
+                <td>PATCH</td>
+                <td>application/json</td>
+                <td>token</td>
+              </tr>
+              <tr>
+                <td>/v1/sentences</td>
+                <td>随机获取一行句子</td>
+                <td>GET</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>/v1/sentences?count=num</td>
+                <td>随机获取任意行句子</td>
+                <td>GET</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>/v1/sentences</td>
+                <td>创建句子</td>
+                <td>POST</td>
+                <td>application/json</td>
+                <td>token</td>
+              </tr>
+              <tr>
+                <td>/v1/sentences/:sentence_id</td>
+                <td>更新指定的一行句子</td>
+                <td>PATCH</td>
+                <td>application/json</td>
+                <td>token</td>
+              </tr>
+              <tr>
+                <td>/v1/sentences/:sentence_id</td>
+                <td>删除指定的一行句子</td>
+                <td>DELETE</td>
+                <td>application/json</td>
+                <td>token</td>
+              </tr>
+              <tr>
+                <td>/v1/sentences/user</td>
+                <td>获取指定用户的句子</td>
+                <td>GET</td>
+                <td>application/json</td>
+                <td>token</td>
+              </tr>
+              <tr>
+                <td>/v1/sentences/like/:sentence_id</td>
+                <td>获取喜欢的句子</td>
+                <td>GET</td>
+                <td>&nbsp;</td>
+                <td>token</td>
+              </tr>
+              <tr>
+                <td>/v1/sentences/:sentence_id</td>
+                <td>删除用户不喜欢的句子</td>
+                <td>DELETE</td>
+                <td>&nbsp;</td>
+                <td>token</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- <section>
+          <h1>鉴权</h1>
+          <p>
+            我们使用 JWT(JSON WEB TOKEN) 来完成用户认证，JWT 的工作模式如下：
           </p>
+        </section> -->
+        <section data-auto-animate="">
+          <h1>UI</h1>
+        </section>
+        <section data-auto-animate="">
+          <h1>UI</h1>
+
+          <div class="g" style="grid-template-columns: repeat(4, 1fr)">
+            <div><img src="./images/遇见.png" alt="" /></div>
+
+            <div><img src="./images/灵感.png" alt="" /></div>
+            <div><img src="./images/喜欢.png" alt="" /></div>
+            <div><img src="./images/数据同步.png" alt="" /></div>
+          </div>
+        </section>
+
+        <section>
+          <div style="position: relative">
+            <h1 class="fragment fade-out">生活的每一瞬间，都值得遇见</h1>
+            <h1 class="fragment fade-in ab" style="left: 0; right: 0; top: 0">
+              感谢聆听
+            </h1>
+          </div>
         </section>
 
         <section>
