@@ -6,92 +6,7 @@
     <title>使用 React Native 构建 App</title>
     <link rel="stylesheet" href="script/reveal.css" />
     <link rel="stylesheet" href="script/theme/black.css" />
-    <style>
-      .rn .navbar-brand,
-      body:not(.rn) .meet-title {
-        opacity: 1;
-        visibility: visible;
-      }
-      .navbar-brand,
-      .meet-title {
-        visibility: hidden;
-        opacity: 0;
-        transition: opacity 0.5s, visibility 0.5s;
-      }
-    </style>
-    <style>
-      .head-intro {
-        position: absolute;
-        z-index: 9;
-        left: 1rem;
-        top: 1rem;
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
-          Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, Helvetica, Arial,
-          Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
-        color: #fff;
-      }
-      .ab {
-        position: absolute;
-      }
-      .tl {
-        text-align: left;
-      }
-      .tr {
-        text-align: right;
-      }
-      .g {
-        display: grid;
-        grid-gap: 20px;
-      }
-      .g-3-4 {
-        grid-template-columns: 3fr 1fr;
-      }
-      .g-half {
-        grid-template-columns: 1fr 1fr;
-      }
-      .f {
-        display: flex;
-      }
-      section > p {
-        text-align: left;
-      }
-      html,
-      body,
-      .reveal {
-        font-size: 18px;
-      }
-
-      .ic {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-      }
-      .ic > figcaption {
-        margin-top: 1rem;
-      }
-      .ic img {
-        flex-shrink: 0;
-      }
-      figcaption > p {
-        margin: 0 !important;
-      }
-      .images {
-        display: flex;
-        justify-content: space-around;
-      }
-      .h-tm {
-        font-size: 1.2em;
-      }
-      .images > .ic {
-        /* margin-right: 5rem; */
-      }
-
-      .tableizer-table td {
-        padding: 4px;
-        margin: 3px;
-      }
-    </style>
+    <link rel="stylesheet" href="./main.css" />
 
     <style>
       .navbar-brand {
@@ -140,10 +55,14 @@
     </div>
 
     <div class="reveal">
+      <small class="copyright"
+        >Member: Innei Jiang, Lomogo Si, Pan Bin, Liu Qiang</small
+      >
+      <small class="acknowledgement"> Powered by reveal.js </small>
       <div class="slides">
         <section>
           <section>
-            <h1>「遇见 APP」</h1>
+            <h1>「<del>遇见</del>一言 APP」</h1>
           </section>
           <section>
             <h1>开始之前, 聊一聊混合开发</h1>
@@ -151,7 +70,7 @@
 
           <section>
             <h1>使用 React Native 构建 App</h1>
-            <h4 style="text-align: right">-- 「遇见 APP」</h4>
+            <h4 style="text-align: right">-- 「<del>遇见</del>一言 APP」</h4>
           </section>
 
           <section>
@@ -458,26 +377,432 @@
           </table>
         </section>
 
-        <!-- <section>
-          <h1>鉴权</h1>
-          <p>
-            我们使用 JWT(JSON WEB TOKEN) 来完成用户认证，JWT 的工作模式如下：
-          </p>
-        </section> -->
         <section data-auto-animate="">
           <h1>UI</h1>
         </section>
-        <section data-auto-animate="">
-          <h1>UI</h1>
+        <section>
+          <h1>Android UI</h1>
 
           <div class="g" style="grid-template-columns: repeat(4, 1fr)">
-            <div><img src="./images/遇见.png" alt="" /></div>
-
-            <div><img src="./images/灵感.png" alt="" /></div>
-            <div><img src="./images/喜欢.png" alt="" /></div>
-            <div><img src="./images/数据同步.png" alt="" /></div>
+            <div><img src="./images/android/遇见.png" alt="" /></div>
+            <div><img src="./images/android/灵感.png" alt="" /></div>
+            <div><img src="./images/android/喜欢.png" alt="" /></div>
+            <div><img src="./images/android/数据同步.png" alt="" /></div>
           </div>
         </section>
+
+        <section>
+          <h1>iOS UI</h1>
+
+          <div class="g" style="grid-template-columns: repeat(4, 1fr)">
+            <div><img src="./images/ios/遇见.png" alt="" /></div>
+            <div><img src="./images/ios/灵感.png" alt="" /></div>
+            <div><img src="./images/ios/喜欢.png" alt="" /></div>
+            <div><img src="./images/ios/数据同步.png" alt="" /></div>
+          </div>
+        </section>
+
+        <section>
+          <h1>Frontend codebase</h1>
+        </section>
+
+        <section>
+          <h1>Home Screen</h1>
+
+          <div class="half-wrapper">
+            <div class="">
+              <img src="./images/ios/遇见.png" alt="" />
+            </div>
+            <div class="">
+              <pre>
+                <code data-trim data-noescape data-line-numbers="13-31">
+ &lt;SafeAreaView&gt;
+      &lt;View
+        style={[
+          styles.root,
+          { alignItems: 'center', justifyContent: 'center' },
+        ]}
+      &gt;
+        &lt;View&gt;
+          &lt;View&gt;
+            &lt;Text style={styles.header}&gt;{today}&lt;/Text&gt;
+          &lt;/View&gt;
+          &lt;View style={styles.content}&gt;
+            {data ? (
+              &lt;Fragment&gt;
+                &lt;Pressable
+                  onLongPress={() =&gt; {
+                    Clipboard.setString(data.text);
+                    toast('已复制: ' + data.text);
+                  }}
+                &gt;
+                  &lt;Text style={styles.text}&gt;{data.text}&lt;/Text&gt;
+                &lt;/Pressable&gt;
+                {data.from ? (
+                  &lt;Text style={{ textAlign: 'right' }}&gt;来自 {data.from}&lt;/Text&gt;
+                ) : null}
+
+                {data.author ? (
+                  &lt;Text style={{ textAlign: 'right' }}&gt;作者 {data.author}&lt;/Text&gt;
+                ) : null}
+              &lt;/Fragment&gt;
+            ) : (
+              &lt;Text&gt;载入中...&lt;/Text&gt;
+            )}
+          &lt;/View&gt;
+        &lt;/View&gt;
+        &lt;View style={styles.actions}&gt;
+          &lt;TouchableOpacity onPress={handleLike}&gt;
+            &lt;Icons
+              name=&quot;heart&quot;
+              size={18}
+              style={[styles.icon, { color: isLiked ? Colors.red : undefined }]}
+              solid={isLiked}
+            /&gt;
+          &lt;/TouchableOpacity&gt;
+          &lt;TouchableOpacity onPress={handleShare}&gt;
+            &lt;Icons name=&quot;share&quot; size={18} /&gt;
+          &lt;/TouchableOpacity&gt;
+        &lt;/View&gt;
+
+        &lt;View style={styles.float}&gt;
+          &lt;TouchableOpacity
+            onPress={() =&gt; {
+              animateButton();
+              fetchData();
+            }}
+          &gt;
+            &lt;Animatable.View style={styles.refresh_button} ref={buttonRef}&gt;
+              &lt;Icons name=&quot;sync&quot; size={16} color={Colors.white} /&gt;
+            &lt;/Animatable.View&gt;
+          &lt;/TouchableOpacity&gt;
+        &lt;/View&gt;
+      &lt;/View&gt;
+    &lt;/SafeAreaView&gt;
+
+                </code>
+              </pre>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h1>Data Fetching</h1>
+          <div class="g g-half">
+            <div class="tl">
+              <p>Data Fetching 使用了 Axios 库.</p>
+
+              <p>
+                Axios 是一个基于 Promise 的 HTTP 库，可以用在浏览器和 Node.JS
+                中。
+              </p>
+
+              <pre>
+<code data-trim="" data-line-numbers="6-9">
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
+    $http.get('/sentences').then((data) => {
+      setData(data as any);
+    });
+  };
+</code>
+
+              </pre>
+            </div>
+
+            <div class="">
+              <pre>
+                <code data-line-numbers="" data-trim="">
+import axios from 'axios';
+import camelcaseKeys from 'camelcase-keys';
+import { configs } from '../../configs';
+import { UserStore } from '../store/user';
+import { JSONParseWithDate } from './json-parser';
+
+export const $http = axios.create({
+  baseURL: configs.api_url, // 'https://api.innei.ren/hikotoko/v1'
+  transformResponse: (res) => {
+    return JSONParseWithDate(res);
+  },
+});
+
+$http.interceptors.request.use((req) => {
+  const token = UserStore.token;
+
+  if (token) {
+    req.headers.Authorization = token;
+  }
+  return req;
+});
+$http.interceptors.response.use(
+  (res) => {
+    const data = { ...res.data };
+
+    return camelcaseKeys(data, { deep: true });
+  },
+  (err) => {
+    const res = err.response;
+    if (!res) {
+      return Promise.reject(err);
+    }
+    if (res?.data?.message) {
+      console.log(res.data.message);
+    } else if (res?.data) {
+      console.log(res.data);
+    }
+    return Promise.reject(err);
+  },
+);
+
+
+                </code>
+              </pre>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h1>State</h1>
+
+          <pre><code data-line-numbers="12|23-31" data-noescape="">
+export const HomeScreen = observer(({ navigation }: any) => {
+  const today = dayjs().format('YYYY-M-D');
+
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
+    $http.get('/sentences').then((data) => {
+      setData(data as any);
+    });
+  };
+  // ....
+&lt;Fragment&gt;
+&lt;Pressable
+  onLongPress={() =&gt; {
+    Clipboard.setString(data.text);
+    toast('已复制: ' + data.text);
+  }}
+&gt;
+  &lt;Text style={styles.text}&gt;{data.text}&lt;/Text&gt;
+&lt;/Pressable&gt;
+{data.from ? (
+  &lt;Text style={{ textAlign: 'right' }}&gt;来自 {data.from}&lt;/Text&gt;
+) : null}
+
+{data.author ? (
+  &lt;Text style={{ textAlign: 'right' }}&gt;作者 {data.author}&lt;/Text&gt;
+) : null}
+&lt;/Fragment&gt;
+}
+          </code></pre>
+        </section>
+
+        <section>
+          <h1>Store</h1>
+          <p>
+            State 为了解决单一组件的数据响应式, Store 为了管理整个 App,
+            多个组件之间的数据响应式
+          </p>
+          <p>这里以 Mobx 库为例</p>
+
+          <pre><code data-trim="" data-noescape="" data-line-numbers="3|19-68">
+export class FavoriteStore {
+  constructor() {
+    makeAutoObservable(this);
+    this.loadList();
+  }
+
+  list: FavoriteModel[] = [];
+
+  get map() {
+    return new Map(this.list.map((m) => [m.id, m]));
+  }
+
+  loadList = async () => {
+    const list = await FavoriteStorage.getList();
+    this.list = list;
+    return this.list;
+  };
+
+  addMore = async (
+    list: (Omit&lt;FavoriteModel, 'id' | 'type'&gt; &amp;
+      Partial&lt;Pick&lt;FavoriteModel, 'id'&gt;&gt;)[],
+  ) =&gt; {
+    for await (const item of list) {
+      await this.add(item);
+    }
+  };
+  add = async (
+    model: Omit&lt;FavoriteModel, 'id' | 'type'&gt; &amp;
+      Partial&lt;Pick&lt;FavoriteModel, 'id'&gt;&gt;,
+  ) =&gt; {
+    if (!model.id) {
+      model.id = new FlakeId().gen();
+      // @ts-ignore
+      model.type = SentenceType.USER;
+    } else {
+      if (
+        this.map.has(model.id) ||
+        (model.likeId &amp;&amp; this.map.has(model.likeId)) ||
+        // @ts-ignore
+        this.map.has(model.nonce)
+      ) {
+        return;
+      }
+
+      //@ts-ignore
+      model.type = SentenceType.SYSTEM;
+      model.likeId = model.id;
+    }
+    // @ts-ignore
+    const newModel = await FavoriteStorage.add(model);
+    this.list = this.list.concat(newModel);
+    try {
+      await $http.post('/sentences', model);
+    } catch (e) {}
+    return this.list;
+  };
+
+  deleteById = async (id: Snowflake) => {
+    await FavoriteStorage.delete(id);
+    this.list = this.list.filter((m) => m.id !== id);
+    return this.list;
+  };
+
+  empty = async () => {
+    for await (const i of this.list) {
+      await this.deleteById(i.id);
+    }
+  };
+}
+
+          </code></pre>
+        </section>
+
+        <section>
+          <h1>Store</h1>
+          <div class="half-wrapper">
+            <div style="width: 80%">
+              <pre><code data-line-numbers="1-3|9-27" data-noescape="" data-trim="">
+export const FavoriteScreen: FC = observer(() =&gt; {
+  const { favoriteStore } = useStore();
+  const list = favoriteStore.list;
+
+  const navigator = useNavigation();
+
+  return (
+    &lt;View style={{ minHeight: '100%' }}&gt;
+      {list.length &gt; 0 ? (
+        &lt;View style={{ minHeight: '100%', backgroundColor: '#fff' }}&gt;
+          &lt;FlatList
+            data={list}
+            renderItem={(listRenderItem) =&gt; (
+              &lt;Fragment&gt;
+                &lt;Item
+                  item={listRenderItem.item}
+                  onDelete={(id) =&gt; {
+                    favoriteStore.deleteById(id);
+                  }}
+                  onPress={(id) =&gt; {
+                    navigator.navigate('item-modal', {
+                      item: listRenderItem.item,
+                    });
+                  }}
+                /&gt;
+                &lt;Divider /&gt;
+              &lt;/Fragment&gt;
+            )}
+          /&gt;
+        &lt;/View&gt;
+      ) : (
+        &lt;View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100%',
+          }}
+        &gt;
+          &lt;Text style={{ color: Colors.deep, fontSize: 18 }}&gt;
+            你还没有任何喜欢的句子哦 QAQ
+          &lt;/Text&gt;
+        &lt;/View&gt;
+      )}
+    &lt;/View&gt;
+  );
+});
+
+
+          </code></pre>
+            </div>
+            <div style="width: 18%" class="ic">
+              <img src="images/ios/喜欢.png" alt="" />
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h1>Storage</h1>
+          <pre><code data-line-numbers="4-40|43-49" data-noescape="" data-trim="">
+class Storage {
+  constructor(private readonly key: string) {}
+
+  getList = async (): Promise&lt;FavoriteModel[]&gt; =&gt; {
+    try {
+      const jsonValue = await AsyncStorage.getItem(this.key);
+      return jsonValue !== null ? JSON.parse(jsonValue) : [];
+    } catch (e) {
+      return [];
+    }
+  };
+
+  add = async (
+    model: Omit&lt;FavoriteModel, 'id'&gt; &amp; Partial&lt;Pick&lt;FavoriteModel, 'id'&gt;&gt;,
+  ) =&gt; {
+    const { id = new FlakeId().gen() as string } = model;
+    const prev = await this.getList();
+    const map = new Map(
+      prev.map((m) =&gt; {
+        return [m.id, m];
+      }),
+    );
+    if (map.has(id)) {
+      return prev;
+    }
+    const newModel = { ...model, id };
+    const newList = prev.concat(newModel);
+    await AsyncStorage.setItem(this.key, JSON.stringify(newList));
+    return newModel;
+  };
+
+  delete = async (id: Snowflake) =&gt; {
+    if (!id) {
+      return;
+    }
+    const prev = await this.getList();
+    const after = prev.filter((m) =&gt; m.id !== id);
+
+    await AsyncStorage.setItem(this.key, JSON.stringify(after));
+  };
+}
+
+class FavoriteStorageStatic extends Storage {
+  public static key = '@meet/favorite';
+  constructor() {
+    super(FavoriteStorageStatic.key);
+  }
+}
+export const FavoriteStorage = new FavoriteStorageStatic();
+          </code></pre>
+        </section>
+
+        <section><h1>next section backend</h1></section>
 
         <section>
           <div style="position: relative">
@@ -513,27 +838,29 @@
       </div>
     </div>
   </body>
+  <link rel="stylesheet" href="script/plugin/highlight/monokai.css" />
   <script src="script/reveal.js"></script>
+  <script src="script/plugin/highlight/highlight.js"></script>
 
   <script>
     Reveal.initialize({
-      mouseWheel: true,
+      // mouseWheel: true,
       hash: true,
       touch: true,
-
+      plugins: [RevealHighlight],
       slideNumber: true,
       // parallaxBackgroundImage: "./public/images/bg.jpg",
       // parallaxBackgroundHorizontal: 200,
       // parallaxBackgroundVertical: 50,
       // parallaxBackgroundSize: "2100px 900px"
     })
-    Reveal.on('slidechanged', (event) => {
+    Reveal.on("slidechanged", (event) => {
       const h = event.indexh
       const v = event.indexv
       if (h === 0 && v > 0) {
-        document.body.classList.add('rn')
+        document.body.classList.add("rn")
       } else {
-        document.body.classList.remove('rn')
+        document.body.classList.remove("rn")
       }
     })
   </script>
