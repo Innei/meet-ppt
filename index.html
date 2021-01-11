@@ -1174,6 +1174,7 @@ async login(req, res) {
         <section data-auto-animate="">
           <h1>Authorization</h1>
           <pre><code data-trim="" data-line-numbers="|10-23|16|17-20|22" class="js">
+// middlewares/auth.js
 const { verify } = require('jsonwebtoken')
 const { User } = require('../models')
 /**
@@ -1209,6 +1210,41 @@ module.exports = async (req, res, next) => {
 }
 
         </code></pre>
+        </section>
+
+        <section data-auto-animate="">
+          <h1>Authorization</h1>
+          <pre><code class="js" data-line-numbers="2,8-14" data-trim="">
+// routes/index.js
+const authMiddleware = require('../middlewares/auth')
+
+// ...
+const sentence = Router()
+
+sentence.get('/', SentenceController.getRandom)
+sentence.use(authMiddleware)
+sentence.get('/like/:id', SentenceController.likeSentence)
+sentence.get('/user', SentenceController.getAllByUser)
+sentence.post('/sync', SentenceController.syncSentence)
+sentence.post('/', SentenceController.insert)
+sentence.patch('/:id', SentenceController.patch)
+sentence.delete('/:id', SentenceController.delete)
+          </code></pre>
+        </section>
+
+        <section>
+          <h1>拥抱开源</h1>
+          <p>此项目以开源于 GitHub</p>
+          <p>
+            <a href="https://github.com/Innei/meet-rn"> meet-rn </a>
+            <span> (https://github.com/Innei/meet-rn) </span>
+          </p>
+          <p>
+            <a href="https://github.com/Innei/hikotoko-server-demo">
+              hikotoko-server
+            </a>
+            <span> (https://github.com/Innei/hikotoko-server-demo) </span>
+          </p>
         </section>
 
         <section>
