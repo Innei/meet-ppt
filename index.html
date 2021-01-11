@@ -270,6 +270,434 @@
         <section>
           <h1>后端我们使用 Node.JS 开发了 Meet 正常工作所需要的接口</h1>
         </section>
+
+        <section data-auto-animate="">
+          <h1>UI</h1>
+        </section>
+        <section>
+          <h1>Android UI</h1>
+
+          <div class="g" style="grid-template-columns: repeat(4, 1fr)">
+            <div><img src="./images/android/遇见.png" alt="" /></div>
+            <div><img src="./images/android/灵感.png" alt="" /></div>
+            <div><img src="./images/android/喜欢.png" alt="" /></div>
+            <div><img src="./images/android/数据同步.png" alt="" /></div>
+          </div>
+        </section>
+
+        <section>
+          <h1>iOS UI</h1>
+
+          <div class="g" style="grid-template-columns: repeat(4, 1fr)">
+            <div><img src="./images/ios/遇见.png" alt="" /></div>
+            <div><img src="./images/ios/灵感.png" alt="" /></div>
+            <div><img src="./images/ios/喜欢.png" alt="" /></div>
+            <div><img src="./images/ios/数据同步.png" alt="" /></div>
+          </div>
+        </section>
+
+        <section>
+          <h1>Frontend codebase</h1>
+        </section>
+
+        <section>
+          <h1>Home Screen</h1>
+
+          <div class="half-wrapper">
+            <div class="">
+              <img src="./images/ios/遇见.png" alt="" />
+            </div>
+            <div class="">
+              <pre>
+                <code data-trim data-noescape data-line-numbers="13-31" class="jsx">
+ &lt;SafeAreaView&gt;
+      &lt;View
+        style={[
+          styles.root,
+          { alignItems: 'center', justifyContent: 'center' },
+        ]}
+      &gt;
+        &lt;View&gt;
+          &lt;View&gt;
+            &lt;Text style={styles.header}&gt;{today}&lt;/Text&gt;
+          &lt;/View&gt;
+          &lt;View style={styles.content}&gt;
+            {data ? (
+              &lt;Fragment&gt;
+                &lt;Pressable
+                  onLongPress={() =&gt; {
+                    Clipboard.setString(data.text);
+                    toast('已复制: ' + data.text);
+                  }}
+                &gt;
+                  &lt;Text style={styles.text}&gt;{data.text}&lt;/Text&gt;
+                &lt;/Pressable&gt;
+                {data.from ? (
+                  &lt;Text style={{ textAlign: 'right' }}&gt;来自 {data.from}&lt;/Text&gt;
+                ) : null}
+
+                {data.author ? (
+                  &lt;Text style={{ textAlign: 'right' }}&gt;作者 {data.author}&lt;/Text&gt;
+                ) : null}
+              &lt;/Fragment&gt;
+            ) : (
+              &lt;Text&gt;载入中...&lt;/Text&gt;
+            )}
+          &lt;/View&gt;
+        &lt;/View&gt;
+        &lt;View style={styles.actions}&gt;
+          &lt;TouchableOpacity onPress={handleLike}&gt;
+            &lt;Icons
+              name=&quot;heart&quot;
+              size={18}
+              style={[styles.icon, { color: isLiked ? Colors.red : undefined }]}
+              solid={isLiked}
+            /&gt;
+          &lt;/TouchableOpacity&gt;
+          &lt;TouchableOpacity onPress={handleShare}&gt;
+            &lt;Icons name=&quot;share&quot; size={18} /&gt;
+          &lt;/TouchableOpacity&gt;
+        &lt;/View&gt;
+
+        &lt;View style={styles.float}&gt;
+          &lt;TouchableOpacity
+            onPress={() =&gt; {
+              animateButton();
+              fetchData();
+            }}
+          &gt;
+            &lt;Animatable.View style={styles.refresh_button} ref={buttonRef}&gt;
+              &lt;Icons name=&quot;sync&quot; size={16} color={Colors.white} /&gt;
+            &lt;/Animatable.View&gt;
+          &lt;/TouchableOpacity&gt;
+        &lt;/View&gt;
+      &lt;/View&gt;
+    &lt;/SafeAreaView&gt;
+
+                </code>
+              </pre>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h1>Data Fetching</h1>
+          <div class="g g-half">
+            <div class="tl">
+              <p>Data Fetching 使用了 Axios 库.</p>
+
+              <p>
+                Axios 是一个基于 Promise 的 HTTP 库，可以用在浏览器和 Node.JS
+                中。
+              </p>
+
+              <pre>
+<code data-trim="" data-line-numbers="6-9" class="ts">
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
+    $http.get('/sentences').then((data) => {
+      setData(data as any);
+    });
+  };
+</code>
+
+              </pre>
+            </div>
+
+            <div class="">
+              <pre>
+                <code data-line-numbers="" data-trim="" class="ts">
+import axios from 'axios';
+import camelcaseKeys from 'camelcase-keys';
+import { configs } from '../../configs';
+import { UserStore } from '../store/user';
+import { JSONParseWithDate } from './json-parser';
+
+export const $http = axios.create({
+  baseURL: configs.api_url, // 'https://api.innei.ren/hikotoko/v1'
+  transformResponse: (res) => {
+    return JSONParseWithDate(res);
+  },
+});
+
+$http.interceptors.request.use((req) => {
+  const token = UserStore.token;
+
+  if (token) {
+    req.headers.Authorization = token;
+  }
+  return req;
+});
+$http.interceptors.response.use(
+  (res) => {
+    const data = { ...res.data };
+
+    return camelcaseKeys(data, { deep: true });
+  },
+  (err) => {
+    const res = err.response;
+    if (!res) {
+      return Promise.reject(err);
+    }
+    if (res?.data?.message) {
+      console.log(res.data.message);
+    } else if (res?.data) {
+      console.log(res.data);
+    }
+    return Promise.reject(err);
+  },
+);
+
+
+                </code>
+              </pre>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h1>State</h1>
+
+          <pre><code data-line-numbers="12|23-31" data-noescape="" class="jsx">
+export const HomeScreen = observer(({ navigation }: any) => {
+  const today = dayjs().format('YYYY-M-D');
+
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
+    $http.get('/sentences').then((data) => {
+      setData(data as any);
+    });
+  };
+  // ....
+&lt;Fragment&gt;
+&lt;Pressable
+  onLongPress={() =&gt; {
+    Clipboard.setString(data.text);
+    toast('已复制: ' + data.text);
+  }}
+&gt;
+  &lt;Text style={styles.text}&gt;{data.text}&lt;/Text&gt;
+&lt;/Pressable&gt;
+{data.from ? (
+  &lt;Text style={{ textAlign: 'right' }}&gt;来自 {data.from}&lt;/Text&gt;
+) : null}
+
+{data.author ? (
+  &lt;Text style={{ textAlign: 'right' }}&gt;作者 {data.author}&lt;/Text&gt;
+) : null}
+&lt;/Fragment&gt;
+}
+          </code></pre>
+        </section>
+
+        <section>
+          <h1>Store</h1>
+          <p>
+            State 为了解决单一组件的数据响应式, Store 为了管理整个 App,
+            多个组件之间的数据响应式
+          </p>
+          <p>这里以 Mobx 库为例</p>
+
+          <pre><code data-trim="" data-noescape="" data-line-numbers="3|19-68" class="ts">
+export class FavoriteStore {
+  constructor() {
+    makeAutoObservable(this);
+    this.loadList();
+  }
+
+  list: FavoriteModel[] = [];
+
+  get map() {
+    return new Map(this.list.map((m) => [m.id, m]));
+  }
+
+  loadList = async () => {
+    const list = await FavoriteStorage.getList();
+    this.list = list;
+    return this.list;
+  };
+
+  addMore = async (
+    list: (Omit&lt;FavoriteModel, 'id' | 'type'&gt; &amp;
+      Partial&lt;Pick&lt;FavoriteModel, 'id'&gt;&gt;)[],
+  ) =&gt; {
+    for await (const item of list) {
+      await this.add(item);
+    }
+  };
+  add = async (
+    model: Omit&lt;FavoriteModel, 'id' | 'type'&gt; &amp;
+      Partial&lt;Pick&lt;FavoriteModel, 'id'&gt;&gt;,
+  ) =&gt; {
+    if (!model.id) {
+      model.id = new FlakeId().gen();
+      // @ts-ignore
+      model.type = SentenceType.USER;
+    } else {
+      if (
+        this.map.has(model.id) ||
+        (model.likeId &amp;&amp; this.map.has(model.likeId)) ||
+        // @ts-ignore
+        this.map.has(model.nonce)
+      ) {
+        return;
+      }
+
+      //@ts-ignore
+      model.type = SentenceType.SYSTEM;
+      model.likeId = model.id;
+    }
+    // @ts-ignore
+    const newModel = await FavoriteStorage.add(model);
+    this.list = this.list.concat(newModel);
+    try {
+      await $http.post('/sentences', model);
+    } catch (e) {}
+    return this.list;
+  };
+
+  deleteById = async (id: Snowflake) => {
+    await FavoriteStorage.delete(id);
+    this.list = this.list.filter((m) => m.id !== id);
+    return this.list;
+  };
+
+  empty = async () => {
+    for await (const i of this.list) {
+      await this.deleteById(i.id);
+    }
+  };
+}
+
+          </code></pre>
+        </section>
+
+        <section>
+          <h1>Store</h1>
+          <div class="half-wrapper">
+            <div style="width: 80%">
+              <pre><code data-line-numbers="1-3|9-27" data-noescape="" data-trim="" class="jsx">
+export const FavoriteScreen: FC = observer(() =&gt; {
+  const { favoriteStore } = useStore();
+  const list = favoriteStore.list;
+
+  const navigator = useNavigation();
+
+  return (
+    &lt;View style={{ minHeight: '100%' }}&gt;
+      {list.length &gt; 0 ? (
+        &lt;View style={{ minHeight: '100%', backgroundColor: '#fff' }}&gt;
+          &lt;FlatList
+            data={list}
+            renderItem={(listRenderItem) =&gt; (
+              &lt;Fragment&gt;
+                &lt;Item
+                  item={listRenderItem.item}
+                  onDelete={(id) =&gt; {
+                    favoriteStore.deleteById(id);
+                  }}
+                  onPress={(id) =&gt; {
+                    navigator.navigate('item-modal', {
+                      item: listRenderItem.item,
+                    });
+                  }}
+                /&gt;
+                &lt;Divider /&gt;
+              &lt;/Fragment&gt;
+            )}
+          /&gt;
+        &lt;/View&gt;
+      ) : (
+        &lt;View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100%',
+          }}
+        &gt;
+          &lt;Text style={{ color: Colors.deep, fontSize: 18 }}&gt;
+            你还没有任何喜欢的句子哦 QAQ
+          &lt;/Text&gt;
+        &lt;/View&gt;
+      )}
+    &lt;/View&gt;
+  );
+});
+
+
+          </code></pre>
+            </div>
+            <div style="width: 18%" class="ic">
+              <img src="images/ios/喜欢.png" alt="" />
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h1>Storage</h1>
+          <pre><code data-line-numbers="4-40|43-49" data-noescape="" data-trim="" class="ts">
+class Storage {
+  constructor(private readonly key: string) {}
+
+  getList = async (): Promise&lt;FavoriteModel[]&gt; =&gt; {
+    try {
+      const jsonValue = await AsyncStorage.getItem(this.key);
+      return jsonValue !== null ? JSON.parse(jsonValue) : [];
+    } catch (e) {
+      return [];
+    }
+  };
+
+  add = async (
+    model: Omit&lt;FavoriteModel, 'id'&gt; &amp; Partial&lt;Pick&lt;FavoriteModel, 'id'&gt;&gt;,
+  ) =&gt; {
+    const { id = new FlakeId().gen() as string } = model;
+    const prev = await this.getList();
+    const map = new Map(
+      prev.map((m) =&gt; {
+        return [m.id, m];
+      }),
+    );
+    if (map.has(id)) {
+      return prev;
+    }
+    const newModel = { ...model, id };
+    const newList = prev.concat(newModel);
+    await AsyncStorage.setItem(this.key, JSON.stringify(newList));
+    return newModel;
+  };
+
+  delete = async (id: Snowflake) =&gt; {
+    if (!id) {
+      return;
+    }
+    const prev = await this.getList();
+    const after = prev.filter((m) =&gt; m.id !== id);
+
+    await AsyncStorage.setItem(this.key, JSON.stringify(after));
+  };
+}
+
+class FavoriteStorageStatic extends Storage {
+  public static key = '@meet/favorite';
+  constructor() {
+    super(FavoriteStorageStatic.key);
+  }
+}
+export const FavoriteStorage = new FavoriteStorageStatic();
+          </code></pre>
+        </section>
+
+        <section><h1>next section backend</h1></section>
+
         <section>
           <h1>
             我们为 Meet 开发了这些接口，这些接口驱动着
@@ -377,432 +805,411 @@
           </table>
         </section>
 
-        <section data-auto-animate="">
-          <h1>UI</h1>
-        </section>
         <section>
-          <h1>Android UI</h1>
+          <h1>model</h1>
 
-          <div class="g" style="grid-template-columns: repeat(4, 1fr)">
-            <div><img src="./images/android/遇见.png" alt="" /></div>
-            <div><img src="./images/android/灵感.png" alt="" /></div>
-            <div><img src="./images/android/喜欢.png" alt="" /></div>
-            <div><img src="./images/android/数据同步.png" alt="" /></div>
-          </div>
-        </section>
+          <pre><code data-trim="" data-line-numbers="1-30|32-61" class="javascript"> 
 
-        <section>
-          <h1>iOS UI</h1>
-
-          <div class="g" style="grid-template-columns: repeat(4, 1fr)">
-            <div><img src="./images/ios/遇见.png" alt="" /></div>
-            <div><img src="./images/ios/灵感.png" alt="" /></div>
-            <div><img src="./images/ios/喜欢.png" alt="" /></div>
-            <div><img src="./images/ios/数据同步.png" alt="" /></div>
-          </div>
-        </section>
-
-        <section>
-          <h1>Frontend codebase</h1>
-        </section>
-
-        <section>
-          <h1>Home Screen</h1>
-
-          <div class="half-wrapper">
-            <div class="">
-              <img src="./images/ios/遇见.png" alt="" />
-            </div>
-            <div class="">
-              <pre>
-                <code data-trim data-noescape data-line-numbers="13-31">
- &lt;SafeAreaView&gt;
-      &lt;View
-        style={[
-          styles.root,
-          { alignItems: 'center', justifyContent: 'center' },
-        ]}
-      &gt;
-        &lt;View&gt;
-          &lt;View&gt;
-            &lt;Text style={styles.header}&gt;{today}&lt;/Text&gt;
-          &lt;/View&gt;
-          &lt;View style={styles.content}&gt;
-            {data ? (
-              &lt;Fragment&gt;
-                &lt;Pressable
-                  onLongPress={() =&gt; {
-                    Clipboard.setString(data.text);
-                    toast('已复制: ' + data.text);
-                  }}
-                &gt;
-                  &lt;Text style={styles.text}&gt;{data.text}&lt;/Text&gt;
-                &lt;/Pressable&gt;
-                {data.from ? (
-                  &lt;Text style={{ textAlign: 'right' }}&gt;来自 {data.from}&lt;/Text&gt;
-                ) : null}
-
-                {data.author ? (
-                  &lt;Text style={{ textAlign: 'right' }}&gt;作者 {data.author}&lt;/Text&gt;
-                ) : null}
-              &lt;/Fragment&gt;
-            ) : (
-              &lt;Text&gt;载入中...&lt;/Text&gt;
-            )}
-          &lt;/View&gt;
-        &lt;/View&gt;
-        &lt;View style={styles.actions}&gt;
-          &lt;TouchableOpacity onPress={handleLike}&gt;
-            &lt;Icons
-              name=&quot;heart&quot;
-              size={18}
-              style={[styles.icon, { color: isLiked ? Colors.red : undefined }]}
-              solid={isLiked}
-            /&gt;
-          &lt;/TouchableOpacity&gt;
-          &lt;TouchableOpacity onPress={handleShare}&gt;
-            &lt;Icons name=&quot;share&quot; size={18} /&gt;
-          &lt;/TouchableOpacity&gt;
-        &lt;/View&gt;
-
-        &lt;View style={styles.float}&gt;
-          &lt;TouchableOpacity
-            onPress={() =&gt; {
-              animateButton();
-              fetchData();
-            }}
-          &gt;
-            &lt;Animatable.View style={styles.refresh_button} ref={buttonRef}&gt;
-              &lt;Icons name=&quot;sync&quot; size={16} color={Colors.white} /&gt;
-            &lt;/Animatable.View&gt;
-          &lt;/TouchableOpacity&gt;
-        &lt;/View&gt;
-      &lt;/View&gt;
-    &lt;/SafeAreaView&gt;
-
-                </code>
-              </pre>
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <h1>Data Fetching</h1>
-          <div class="g g-half">
-            <div class="tl">
-              <p>Data Fetching 使用了 Axios 库.</p>
-
-              <p>
-                Axios 是一个基于 Promise 的 HTTP 库，可以用在浏览器和 Node.JS
-                中。
-              </p>
-
-              <pre>
-<code data-trim="" data-line-numbers="6-9">
-  const [data, setData] = useState(null);
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = () => {
-    $http.get('/sentences').then((data) => {
-      setData(data as any);
-    });
-  };
-</code>
-
-              </pre>
-            </div>
-
-            <div class="">
-              <pre>
-                <code data-line-numbers="" data-trim="">
-import axios from 'axios';
-import camelcaseKeys from 'camelcase-keys';
-import { configs } from '../../configs';
-import { UserStore } from '../store/user';
-import { JSONParseWithDate } from './json-parser';
-
-export const $http = axios.create({
-  baseURL: configs.api_url, // 'https://api.innei.ren/hikotoko/v1'
-  transformResponse: (res) => {
-    return JSONParseWithDate(res);
+const SentenceSchema = new mongoose.Schema(
+  {
+    text: {
+      type: String,
+    },
+    type: {
+      type: Number,
+      default: SentenceType.USER,
+    },
+    user_id: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'User',
+    },
+    author: {
+      type: String,
+    },
+    from: {
+      type: String,
+    },
+    nonce: {
+      type: String,
+    },
+    liked_id: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'Sentence',
+    },
   },
-});
+  SchemaOptions,
+)
 
-$http.interceptors.request.use((req) => {
-  const token = UserStore.token;
 
-  if (token) {
-    req.headers.Authorization = token;
-  }
-  return req;
-});
-$http.interceptors.response.use(
-  (res) => {
-    const data = { ...res.data };
-
-    return camelcaseKeys(data, { deep: true });
+const UserSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+    index: 1,
   },
-  (err) => {
-    const res = err.response;
-    if (!res) {
-      return Promise.reject(err);
-    }
-    if (res?.data?.message) {
-      console.log(res.data.message);
-    } else if (res?.data) {
-      console.log(res.data);
-    }
-    return Promise.reject(err);
+  password: {
+    type: String,
+    required: true,
+    get(val) {
+      return val
+    },
+    set(val) {
+      return hashSync(val, 3)
+    },
+    select: false,
   },
-);
+  email: {
+    type: String,
+    required: true,
+  },
+  randomCode: {
+    type: String,
+    default: () => {
+      return nanoid(6)
+    },
+    select: false,
+  },
+})
 
-
-                </code>
-              </pre>
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <h1>State</h1>
-
-          <pre><code data-line-numbers="12|23-31" data-noescape="">
-export const HomeScreen = observer(({ navigation }: any) => {
-  const today = dayjs().format('YYYY-M-D');
-
-  const [data, setData] = useState(null);
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = () => {
-    $http.get('/sentences').then((data) => {
-      setData(data as any);
-    });
-  };
-  // ....
-&lt;Fragment&gt;
-&lt;Pressable
-  onLongPress={() =&gt; {
-    Clipboard.setString(data.text);
-    toast('已复制: ' + data.text);
-  }}
-&gt;
-  &lt;Text style={styles.text}&gt;{data.text}&lt;/Text&gt;
-&lt;/Pressable&gt;
-{data.from ? (
-  &lt;Text style={{ textAlign: 'right' }}&gt;来自 {data.from}&lt;/Text&gt;
-) : null}
-
-{data.author ? (
-  &lt;Text style={{ textAlign: 'right' }}&gt;作者 {data.author}&lt;/Text&gt;
-) : null}
-&lt;/Fragment&gt;
-}
           </code></pre>
         </section>
 
         <section>
-          <h1>Store</h1>
-          <p>
-            State 为了解决单一组件的数据响应式, Store 为了管理整个 App,
-            多个组件之间的数据响应式
-          </p>
-          <p>这里以 Mobx 库为例</p>
+          <h1>Sentence Controller</h1>
+          <pre><code data-trim="" data-line-numbers="1-234|55-92|56-61|69-78|80-91" class="js">
+class SentenceControllerStatic {
+  async getRandom(req, res) {
+    const { count: queryCount } = req.query
+    assert(
+      typeof queryCount === 'undefined' ||
+        typeof parseInt(queryCount) === 'number',
+      422,
+      'count must be number or undefined. got ' + queryCount,
+    )
 
-          <pre><code data-trim="" data-noescape="" data-line-numbers="3|19-68">
-export class FavoriteStore {
-  constructor() {
-    makeAutoObservable(this);
-    this.loadList();
-  }
-
-  list: FavoriteModel[] = [];
-
-  get map() {
-    return new Map(this.list.map((m) => [m.id, m]));
-  }
-
-  loadList = async () => {
-    const list = await FavoriteStorage.getList();
-    this.list = list;
-    return this.list;
-  };
-
-  addMore = async (
-    list: (Omit&lt;FavoriteModel, 'id' | 'type'&gt; &amp;
-      Partial&lt;Pick&lt;FavoriteModel, 'id'&gt;&gt;)[],
-  ) =&gt; {
-    for await (const item of list) {
-      await this.add(item);
-    }
-  };
-  add = async (
-    model: Omit&lt;FavoriteModel, 'id' | 'type'&gt; &amp;
-      Partial&lt;Pick&lt;FavoriteModel, 'id'&gt;&gt;,
-  ) =&gt; {
-    if (!model.id) {
-      model.id = new FlakeId().gen();
-      // @ts-ignore
-      model.type = SentenceType.USER;
+    const count = await Sentence.countDocuments()
+    assert(count !== 0, 422, 'has no sentences yet.')
+    if (!queryCount) {
+      const data = await Sentence.findOne().skip(
+        Math.floor(Math.random() * count),
+      )
+      res.send(data)
     } else {
-      if (
-        this.map.has(model.id) ||
-        (model.likeId &amp;&amp; this.map.has(model.likeId)) ||
-        // @ts-ignore
-        this.map.has(model.nonce)
-      ) {
-        return;
+      const data = await Sentence.aggregate([
+        {
+          $match: {
+            liked_id: null,
+          },
+        },
+        {
+          $sample: { size: ~~queryCount },
+        },
+      ])
+      res.send(data)
+    }
+  }
+
+  async insert(req, res) {
+    const { author, from, text } = req.body
+
+    validNotEmptyString(text, 'text')
+    validStringOrUndefined(author, 'author')
+    validStringOrUndefined(from, 'from')
+
+    const { user } = req
+    const { _id: user_id } = user
+
+    const data = await Sentence.create({
+      author,
+      text,
+      from,
+      type: SentenceType.USER,
+      user_id,
+      nonce: Snowflake.gen(),
+    })
+
+    res.status(201).send(data)
+  }
+
+  async likeSentence(req, res) {
+    const { id } = req.params
+
+    const { user } = req
+    const { _id: user_id } = user
+
+    assert(Types.ObjectId.isValid(id), 422, 'id must be object id. got ' + id)
+
+    const hasDocument = await Sentence.findOne({
+      _id: id,
+      type: SentenceType.SYSTEM,
+    })
+    assert(hasDocument, 422, 'sentence not found.')
+
+    const isLiked = await Sentence.findOne({
+      type: SentenceType.USER,
+      liked_id: id,
+    })
+
+    assert(
+      !isLiked,
+      422,
+      'sentence already liked. document id: ' + (isLiked && isLiked._id),
+    )
+
+    const newModel = {
+      ...hasDocument.toJSON(),
+      type: SentenceType.USER,
+      liked_id: hasDocument._id,
+      user_id,
+      nonce: Snowflake.gen(),
+    }
+    delete newModel._id
+    delete newModel.id
+    delete newModel.updated_at
+    const document = await Sentence.create(newModel)
+    res.send(document)
+  }
+
+  async patch(req, res) {
+    const { id: _id } = req.params
+
+    assert(Types.ObjectId.isValid(_id), 422, 'id must be object id. got ' + _id)
+    const { author, from, text } = req.body
+    const {
+      user: { _id: user_id },
+    } = req
+    validStringOrUndefined(author, 'author')
+    validStringOrUndefined(from, 'from')
+    validStringOrUndefined(text, 'text')
+
+    const doc = await Sentence.findOne({
+      _id,
+      type: SentenceType.USER,
+      user_id,
+    })
+    assert(doc, 422, 'sentence not found.')
+
+    await Sentence.updateOne(
+      {
+        _id,
+        type: SentenceType.USER,
+        user_id,
+        nonce: Snowflake.gen(),
+      },
+      {
+        author,
+        from,
+        text,
+      },
+      {
+        omitUndefined: true,
+      },
+    )
+
+    res.status(204).end()
+  }
+
+  async delete(req, res) {
+    const { id } = req.params
+    const {
+      user: { _id: user_id },
+    } = req
+    assert(id && Types.ObjectId.isValid(id), 422, 'id must be object id.')
+    const doc = await Sentence.findOne({
+      _id: id,
+      type: SentenceType.USER,
+      user_id,
+    })
+    assert(doc, 422, 'sentence not found.')
+
+    await Sentence.deleteOne({ _id: id })
+    res.status(204).end()
+  }
+
+  async getAllByUser(req, res) {
+    // TODO pager
+    const { user } = req
+    const { _id: user_id } = user
+
+    const data = await Sentence.find({
+      type: SentenceType.USER,
+      user_id,
+    })
+
+    res.send({ data: data })
+  }
+
+  // sync sentences
+  async syncSentence(req, res) {
+    const { body } = req
+    const {
+      user: { _id: user_id },
+    } = req
+    assert(Array.isArray(body), 422, `body must be a array, got ${body}`)
+    const isValid = body.every(
+      (i) =>
+        typeof i.nonce === 'string' &&
+        typeof i.text === 'string' &&
+        [0, 1].includes(i.type),
+    )
+    assert(
+      isValid,
+      422,
+      `list type must be SentenceType, got ${JSON.stringify(body)}`,
+    )
+
+    const now = new Date()
+    // console.log(body)
+    for await (const item of body) {
+      const isBuiltIn = Types.ObjectId.isValid(item.nonce)
+      if (isBuiltIn) {
+        const sentence = await Sentence.findOne({
+          _id: item.nonce,
+          type: SentenceType.SYSTEM,
+        })
+
+        if (sentence) {
+          const model = sentence.toJSON()
+          delete model._id
+          delete model.created_at
+          delete model.updated_at
+
+          model.user_id = user_id
+          model.liked_id = sentence._id
+
+          await Sentence.create({
+            ...item,
+            ...model,
+            type: SentenceType.USER,
+          })
+        } else {
+          await Sentence.create({ ...item, user_id })
+        }
+      } else {
+        await Sentence.create({ ...item, user_id })
       }
-
-      //@ts-ignore
-      model.type = SentenceType.SYSTEM;
-      model.likeId = model.id;
     }
-    // @ts-ignore
-    const newModel = await FavoriteStorage.add(model);
-    this.list = this.list.concat(newModel);
-    try {
-      await $http.post('/sentences', model);
-    } catch (e) {}
-    return this.list;
-  };
 
-  deleteById = async (id: Snowflake) => {
-    await FavoriteStorage.delete(id);
-    this.list = this.list.filter((m) => m.id !== id);
-    return this.list;
-  };
+    // then clean before data
 
-  empty = async () => {
-    for await (const i of this.list) {
-      await this.deleteById(i.id);
-    }
-  };
-}
+    await Sentence.deleteMany({
+      type: SentenceType.USER,
+      created_at: {
+        $lte: now,
+      },
+    })
 
-          </code></pre>
-        </section>
+    // get all data
 
-        <section>
-          <h1>Store</h1>
-          <div class="half-wrapper">
-            <div style="width: 80%">
-              <pre><code data-line-numbers="1-3|9-27" data-noescape="" data-trim="">
-export const FavoriteScreen: FC = observer(() =&gt; {
-  const { favoriteStore } = useStore();
-  const list = favoriteStore.list;
+    const list = await Sentence.find({
+      type: SentenceType.USER,
+      user_id,
+    })
 
-  const navigator = useNavigation();
-
-  return (
-    &lt;View style={{ minHeight: '100%' }}&gt;
-      {list.length &gt; 0 ? (
-        &lt;View style={{ minHeight: '100%', backgroundColor: '#fff' }}&gt;
-          &lt;FlatList
-            data={list}
-            renderItem={(listRenderItem) =&gt; (
-              &lt;Fragment&gt;
-                &lt;Item
-                  item={listRenderItem.item}
-                  onDelete={(id) =&gt; {
-                    favoriteStore.deleteById(id);
-                  }}
-                  onPress={(id) =&gt; {
-                    navigator.navigate('item-modal', {
-                      item: listRenderItem.item,
-                    });
-                  }}
-                /&gt;
-                &lt;Divider /&gt;
-              &lt;/Fragment&gt;
-            )}
-          /&gt;
-        &lt;/View&gt;
-      ) : (
-        &lt;View
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: '100%',
-          }}
-        &gt;
-          &lt;Text style={{ color: Colors.deep, fontSize: 18 }}&gt;
-            你还没有任何喜欢的句子哦 QAQ
-          &lt;/Text&gt;
-        &lt;/View&gt;
-      )}
-    &lt;/View&gt;
-  );
-});
-
-
-          </code></pre>
-            </div>
-            <div style="width: 18%" class="ic">
-              <img src="images/ios/喜欢.png" alt="" />
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <h1>Storage</h1>
-          <pre><code data-line-numbers="4-40|43-49" data-noescape="" data-trim="">
-class Storage {
-  constructor(private readonly key: string) {}
-
-  getList = async (): Promise&lt;FavoriteModel[]&gt; =&gt; {
-    try {
-      const jsonValue = await AsyncStorage.getItem(this.key);
-      return jsonValue !== null ? JSON.parse(jsonValue) : [];
-    } catch (e) {
-      return [];
-    }
-  };
-
-  add = async (
-    model: Omit&lt;FavoriteModel, 'id'&gt; &amp; Partial&lt;Pick&lt;FavoriteModel, 'id'&gt;&gt;,
-  ) =&gt; {
-    const { id = new FlakeId().gen() as string } = model;
-    const prev = await this.getList();
-    const map = new Map(
-      prev.map((m) =&gt; {
-        return [m.id, m];
-      }),
-    );
-    if (map.has(id)) {
-      return prev;
-    }
-    const newModel = { ...model, id };
-    const newList = prev.concat(newModel);
-    await AsyncStorage.setItem(this.key, JSON.stringify(newList));
-    return newModel;
-  };
-
-  delete = async (id: Snowflake) =&gt; {
-    if (!id) {
-      return;
-    }
-    const prev = await this.getList();
-    const after = prev.filter((m) =&gt; m.id !== id);
-
-    await AsyncStorage.setItem(this.key, JSON.stringify(after));
-  };
-}
-
-class FavoriteStorageStatic extends Storage {
-  public static key = '@meet/favorite';
-  constructor() {
-    super(FavoriteStorageStatic.key);
+    res.send({ data: list })
   }
 }
-export const FavoriteStorage = new FavoriteStorageStatic();
+
+module.exports = new SentenceControllerStatic()
+
+  </code></pre>
+        </section>
+
+        <section data-auto-animate="">
+          <h1>Authorization</h1>
+
+          <pre><code data-trim="" data-line-numbers="|4|5-6|41-48|7-13|15-17|19|30-37" class="js">
+// login
+
+async login(req, res) {
+    const { username, password } = req.body
+    validNotEmptyString(username, 'username')
+    validNotEmptyString(password, 'password')
+    const user = await User.findOne({
+      username,
+    })
+      .select('+randomCode +password')
+      .lean()
+
+    assert(!!user, 422, 'user not exists')
+
+    const isValid = compareSync(password, user.password)
+
+    assert(isValid, 422, 'password not correct.')
+
+    const token = this.signToken(user)
+    delete user.randomCode
+    delete user.password
+
+    res.send({
+      ...user,
+      avatar: getGravatar(user.email),
+      token,
+    })
+  }
+
+  signToken(doc) {
+    return (
+      'bearer ' +
+      sign(
+        { username: doc.username, code: doc.randomCode, id: doc._id },
+        constant.jwtKey,
+      )
+    )
+  }
+
+
+  // utils
+  const validNotEmptyString = (val, name) => {
+  assert(
+    typeof val === 'string' && val.length > 0,
+    422,
+    name + ' must be not empty string, got ' + val,
+  )
+}
           </code></pre>
         </section>
 
-        <section><h1>next section backend</h1></section>
+        <section data-auto-animate="">
+          <h1>Authorization</h1>
+          <pre><code data-trim="" data-line-numbers="|10-23|16|17-20|22" class="js">
+const { verify } = require('jsonwebtoken')
+const { User } = require('../models')
+/**
+ *
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @param {*} next
+ */
+module.exports = async (req, res, next) => {
+  if (req.headers.authorization) {
+    const tokenString = req.headers.authorization.replace(/^bearer /, '')
+
+    try {
+      const { code, id } = verify(tokenString, constant.jwtKey)
+
+      const user = await User.findById(id).select({ randomCode: 1 })
+      const randomCode = user.randomCode
+
+      if (code === randomCode) {
+        req.user = user
+
+        return next()
+      }
+    } catch (e) {
+      console.log(e)
+      return res.status(422).send({ message: 'token is valid' })
+    }
+  }
+
+  return res
+    .status(422)
+    .send({ message: 'authorization failed, check token please,' })
+}
+
+        </code></pre>
+        </section>
 
         <section>
           <div style="position: relative">
@@ -838,7 +1245,7 @@ export const FavoriteStorage = new FavoriteStorageStatic();
       </div>
     </div>
   </body>
-  <link rel="stylesheet" href="./script/plugin/highlight/monokai.css" />
+  <link rel="stylesheet" href="./script/plugin/highlight/zenburn.css" />
   <!-- <script src="./script/reveal.js"></script> -->
 
   <script src="./index.js"></script>
