@@ -305,11 +305,25 @@
 
           <div class="half-wrapper">
             <div style="width: 23%">
-              <img src="./images/ios/遇见.png" alt="" />
+              <div class="r full">
+                <div
+                  style="
+                    position: absolute;
+                    width: 80%;
+                    height: 20%;
+                    top: 40%;
+                    left: 0;
+                    right: 0;
+                    margin: auto;
+                    border: 3px solid red;
+                  "
+                ></div>
+                <img src="./images/ios/遇见.png" alt="" />
+              </div>
             </div>
             <div style="width: 75%">
               <pre>
-                <code data-trim data-noescape data-line-numbers="13-31" class="jsx">
+                <code data-trim data-noescape data-line-numbers="8-35|68-124|12|82-86" class="tsx">
  &lt;SafeAreaView&gt;
       &lt;View
         style={[
@@ -374,8 +388,169 @@
       &lt;/View&gt;
     &lt;/SafeAreaView&gt;
 
+
+// ...
+
+const styles = StyleSheet.create({
+  root: {
+    minHeight: Platform.OS === 'ios' ? '95%' : '100%',
+    minWidth: '100%',
+    flex: 1,
+    flexDirection: 'column',
+  },
+  header: {
+    color: '#bbb',
+    textAlign: 'center',
+  },
+  flex: {
+    flex: 1,
+  },
+  content: {
+    marginVertical: 12,
+    width: '100%',
+    paddingHorizontal: 30,
+  },
+  actions: {
+    position: 'absolute',
+    bottom: Platform.OS === 'ios' ? 50 : 30,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  float: {
+    position: 'absolute',
+    right: 20,
+    top: '75%',
+  },
+  refresh_button: {
+    backgroundColor: Colors.theme,
+    padding: 20,
+    borderRadius: 50,
+    ...(Platform.OS === 'ios'
+      ? {
+          shadowColor: Colors.deep,
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.22,
+          shadowRadius: 2.22,
+
+          elevation: 3,
+        }
+      : {}),
+  },
+  icon: { marginRight: 48 },
+
+  text: {
+    color: Colors.theme,
+    fontSize: 24,
+  },
+});
+
                 </code>
               </pre>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h1>Layout</h1>
+          <div class="half-wrapper">
+            <div style="width: 30%">
+              <div class="r full">
+                <img src="./images/ios/喜欢.png" alt="" />
+                <div
+                  style="bottom: 0; height: 10%; width: 90%"
+                  class="mark"
+                ></div>
+              </div>
+            </div>
+            <div class="" style="width: 69%">
+              <pre><code data-line-numbers="25-78|15-24" data-trim="" data-noescape="" class="tsx">
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import React from 'react';
+import { Platform } from 'react-native';
+import Icons from 'react-native-vector-icons/FontAwesome5';
+import AntdIcons from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { HomeStackScreen } from '../../screens/home';
+import { InspireStackScreen } from '../../screens/inspire';
+import { FavoriteStackScreen } from '../../screens/favorite';
+import { SettingStackScreen } from '../../screens/setting';
+
+const Tab = createBottomTabNavigator();
+export const BottomNavigationTabSimpleUsageShowcase = () =&gt; {
+  return (
+    &lt;Tab.Navigator
+      tabBarOptions={{
+        keyboardHidesTabBar: true,
+        style: { paddingTop: 10 },
+        allowFontScaling: true,
+        safeAreaInsets: {
+          bottom: Platform.OS === 'android' ? 10 : undefined,
+        },
+      }}
+    &gt;
+      &lt;Tab.Screen
+        name=&quot;Home&quot;
+        component={HomeStackScreen}
+        options={{
+          title: '遇见',
+
+          tabBarIcon: ({ color, size, focused }) =&gt; (
+            &lt;Icons
+              name=&quot;circle-notch&quot;
+              color={color}
+              size={size}
+              solid={focused}
+            /&gt;
+          ),
+        }}
+      /&gt;
+      &lt;Tab.Screen
+        name=&quot;inspire&quot;
+        component={InspireStackScreen}
+        options={{
+          title: '灵感',
+          tabBarIcon: ({ color, size, focused }) =&gt; (
+            &lt;Icons name=&quot;lightbulb&quot; color={color} size={size} solid={focused} /&gt;
+          ),
+        }}
+      /&gt;
+      &lt;Tab.Screen
+        name=&quot;favorite&quot;
+        component={FavoriteStackScreen}
+        options={{
+          title: '喜欢',
+          tabBarIcon: ({ color, size, focused }) =&gt; (
+            &lt;&gt;
+              {focused ? (
+                &lt;AntdIcons name=&quot;heart&quot; color={color} size={size} /&gt;
+              ) : (
+                &lt;AntdIcons name=&quot;hearto&quot; color={color} size={size} /&gt;
+              )}
+            &lt;/&gt;
+          ),
+        }}
+      /&gt;
+      &lt;Tab.Screen
+        name=&quot;@me&quot;
+        component={SettingStackScreen}
+        options={{
+          title: '我',
+          tabBarIcon: ({ color, size, focused }) =&gt; (
+            &lt;&gt;
+              &lt;AntdIcons name=&quot;user&quot; color={color} size={size} /&gt;
+            &lt;/&gt;
+          ),
+        }}
+      /&gt;
+    &lt;/Tab.Navigator&gt;
+  );
+};
+            </code></pre>
             </div>
           </div>
         </section>
@@ -584,7 +759,7 @@ export class FavoriteStore {
           <h1>Store</h1>
           <div class="half-wrapper">
             <div style="width: 80%">
-              <pre><code data-line-numbers="1-3|9-27" data-noescape="" data-trim="" class="jsx">
+              <pre><code data-line-numbers="2-3|9-27" data-noescape="" data-trim="" class="jsx">
 export const FavoriteScreen: FC = observer(() =&gt; {
   const { favoriteStore } = useStore();
   const list = favoriteStore.list;
@@ -636,7 +811,13 @@ export const FavoriteScreen: FC = observer(() =&gt; {
           </code></pre>
             </div>
             <div style="width: 18%" class="ic">
-              <img src="images/ios/喜欢.png" alt="" />
+              <div class="r full">
+                <div
+                  class="mark"
+                  style="top: 10%; height: 30%; width: 95%"
+                ></div>
+                <img src="images/ios/喜欢.png" alt="" />
+              </div>
             </div>
           </div>
         </section>
@@ -706,13 +887,14 @@ export const FavoriteStorage = new FavoriteStorageStatic();
         </section>
 
         <section>
+          <h1>RESTFul API</h1>
           <table class="tableizer-table">
             <thead>
               <tr class="tableizer-firstrow">
                 <th>API</th>
-                <th>API含义</th>
-                <th>请求方式</th>
-                <th>Content-Type</th>
+                <th>Description</th>
+                <th>Method</th>
+
                 <th>Authorization</th>
               </tr>
             </thead>
@@ -721,29 +903,29 @@ export const FavoriteStorage = new FavoriteStorageStatic();
                 <td>/v1/auth/register</td>
                 <td>用户注册</td>
                 <td>POST</td>
-                <td>application/json</td>
+
                 <td>&nbsp;</td>
               </tr>
               <tr>
                 <td>/v1/auth/login</td>
                 <td>用户登陆接口</td>
                 <td>POST</td>
-                <td>application/json</td>
+
                 <td>&nbsp;</td>
               </tr>
               <tr>
                 <td>/v1/users</td>
                 <td>用户注销</td>
                 <td>DELETE</td>
-                <td>&nbsp;</td>
-                <td>token</td>
+
+                <td>Bearer Token</td>
               </tr>
               <tr>
                 <td>/v1/users</td>
                 <td>更新用户信息</td>
                 <td>PATCH</td>
-                <td>application/json</td>
-                <td>token</td>
+
+                <td>Bearer Token</td>
               </tr>
               <tr>
                 <td>/v1/sentences</td>
@@ -763,43 +945,43 @@ export const FavoriteStorage = new FavoriteStorageStatic();
                 <td>/v1/sentences</td>
                 <td>创建句子</td>
                 <td>POST</td>
-                <td>application/json</td>
-                <td>token</td>
+
+                <td>Bearer Token</td>
               </tr>
               <tr>
                 <td>/v1/sentences/:sentence_id</td>
                 <td>更新指定的一行句子</td>
                 <td>PATCH</td>
-                <td>application/json</td>
-                <td>token</td>
+
+                <td>Bearer Token</td>
               </tr>
               <tr>
                 <td>/v1/sentences/:sentence_id</td>
                 <td>删除指定的一行句子</td>
                 <td>DELETE</td>
-                <td>application/json</td>
-                <td>token</td>
+
+                <td>Bearer Token</td>
               </tr>
               <tr>
                 <td>/v1/sentences/user</td>
                 <td>获取指定用户的句子</td>
                 <td>GET</td>
-                <td>application/json</td>
-                <td>token</td>
+
+                <td>Bearer Token</td>
               </tr>
               <tr>
                 <td>/v1/sentences/like/:sentence_id</td>
                 <td>获取喜欢的句子</td>
                 <td>GET</td>
-                <td>&nbsp;</td>
-                <td>token</td>
+
+                <td>Bearer Token</td>
               </tr>
               <tr>
                 <td>/v1/sentences/:sentence_id</td>
                 <td>删除用户不喜欢的句子</td>
                 <td>DELETE</td>
-                <td>&nbsp;</td>
-                <td>token</td>
+
+                <td>Bearer Token</td>
               </tr>
             </tbody>
           </table>
@@ -1282,29 +1464,6 @@ sentence.delete('/:id', SentenceController.delete)
     </div>
   </body>
   <link rel="stylesheet" href="./script/plugin/highlight/zenburn.css" />
-  <!-- <script src="./script/reveal.js"></script> -->
 
   <script src="./index.js"></script>
-  <!-- <script>
-    Reveal.initialize({
-      // mouseWheel: true,
-      hash: true,
-      touch: true,
-      plugins: [RevealHighlight],
-      slideNumber: true,
-      // parallaxBackgroundImage: "./public/images/bg.jpg",
-      // parallaxBackgroundHorizontal: 200,
-      // parallaxBackgroundVertical: 50,
-      // parallaxBackgroundSize: "2100px 900px"
-    })
-    Reveal.on("slidechanged", (event) => {
-      const h = event.indexh
-      const v = event.indexv
-      if (h === 0 && v > 0) {
-        document.body.classList.add("rn")
-      } else {
-        document.body.classList.remove("rn")
-      }
-    })
-  </script> -->
 </html>

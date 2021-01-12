@@ -43,6 +43,13 @@ body:not(.rn) .meet-title {
 .f {
   display: flex;
 }
+.r {
+  position: relative;
+}
+.full {
+  height: 100%;
+  width: 100%;
+}
 section > p {
   text-align: left;
 }
@@ -94,6 +101,7 @@ img {
 }
 .half-wrapper {
   overflow: hidden;
+  position: relative;
 }
 
 .half-wrapper > div {
@@ -124,4 +132,12 @@ del {
 .acknowledgement {
   bottom: 1em;
   right: 8em;
+}
+
+.mark {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  border: 3px solid red;
 }

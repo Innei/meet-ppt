@@ -1,9 +1,9 @@
 /*
  * @Author: Innei
  * @Date: 2021-01-10 18:35:02
- * @LastEditTime: 2021-01-10 18:35:02
+ * @LastEditTime: 2021-01-12 12:52:09
  * @LastEditors: Innei
- * @FilePath: /使用 React Native 构建 App/index.js
+ * @FilePath: /rn-ppt/index.js
  * @Mark: Coding with Love
  */
 import Reveal from "./script/reveal.esm"
@@ -28,3 +28,21 @@ Reveal.on("slidechanged", (event) => {
     document.body.classList.remove("rn")
   }
 })
+
+document.onclick = (e) => {
+  if (e.target.className === "slide-background-content") {
+    Reveal.next()
+  }
+}
+
+document.onwheel = (e) => {
+  if (e.target.className === "slide-background-content") {
+    e.deltaY > 0 ? Reveal.next() : Reveal.prev()
+  }
+}
+
+// document.onkeydown = e => {
+//   if (e.code == 'n') {
+//     Reveal.slide()
+//   }
+// }
