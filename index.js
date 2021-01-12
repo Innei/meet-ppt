@@ -1,13 +1,14 @@
 /*
  * @Author: Innei
  * @Date: 2021-01-10 18:35:02
- * @LastEditTime: 2021-01-12 12:52:09
+ * @LastEditTime: 2021-01-12 13:14:36
  * @LastEditors: Innei
  * @FilePath: /rn-ppt/index.js
  * @Mark: Coding with Love
  */
 import Reveal from "./script/reveal.esm"
 import RevealHighlight from "./script/plugin/highlight/highlight.js"
+
 Reveal.initialize({
   // mouseWheel: true,
   hash: true,
